@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реклама — Декабрь 2025</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            text-align: center;
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .stats span {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .filters {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filters-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filters-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .filters label {
+            font-size: 12px;
+            color: #888;
+            margin-right: 5px;
+        }
+        
+        .filters select {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .filters select:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .contact {
+            margin: 8px 0;
+            background: #16213e;
+            border-radius: 10px;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+        
+        .move-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+        
+        .btn-move {
+            background: #334155;
+            color: #888;
+            border: none;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin: 1px 0;
+        }
+        
+        .btn-move:hover {
+            background: #4ade80;
+            color: #000;
+        }
+        
+        .contact.hidden {
+            display: none;
+        }
+        
+        .contact:hover {
+            background: #1f3460;
+        }
+        
+        .contact.done {
+            background: #064e3b;
+            border-left: 4px solid #4ade80;
+        }
+        
+        .contact-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            cursor: pointer;
+        }
+        
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #4ade80;
+            flex-shrink: 0;
+        }
+        
+        .number {
+            color: #666;
+            margin-right: 12px;
+            font-size: 12px;
+            min-width: 25px;
+        }
+        
+        .contact-name-input {
+            color: #60a5fa;
+            font-size: 16px;
+            font-weight: bold;
+            flex-grow: 1;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 4px 8px;
+            margin: -4px 0;
+            min-width: 100px;
+        }
+        
+        .contact-name-input:hover {
+            border-color: #334155;
+        }
+        
+        .contact-name-input:focus {
+            outline: none;
+            border-color: #4ade80;
+            background: #0f172a;
+        }
+        
+        .contact-status {
+            font-size: 11px;
+            margin-right: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #334155;
+            white-space: nowrap;
+        }
+        
+        .btn-open-single {
+            background: #3b82f6;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .btn-open-single:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        .expand-icon {
+            margin-left: 10px;
+            font-size: 12px;
+            color: #666;
+            transition: transform 0.2s;
+        }
+        
+        .contact.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .contact-fields {
+            display: none;
+            padding: 0 15px 15px 15px;
+            border-top: 1px solid #334155;
+        }
+        
+        .contact.expanded .contact-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding-top: 15px;
+        }
+        
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .field.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .field label {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 3px;
+        }
+        
+        .field input, .field select, .field textarea {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .field input:focus, .field select:focus, .field textarea:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .field select {
+            cursor: pointer;
+        }
+        
+        .section {
+            background: #f59e0b;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .section.hidden {
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #dc2626;
+        }
+        
+        .btn-save {
+            background: #4ade80;
+            color: #000;
+        }
+        
+        .btn-save:hover {
+            background: #22c55e;
+        }
+        
+        .btn-import {
+            background: #a855f7;
+            color: white;
+        }
+        
+        .btn-import:hover {
+            background: #9333ea;
+        }
+        
+        .btn-open {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-open:hover {
+            background: #2563eb;
+        }
+        
+        .btn-toggle {
+            background: #64748b;
+            color: white;
+        }
+        
+        .btn-toggle:hover {
+            background: #475569;
+        }
+        
+        .btn-add {
+            background: #10b981;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 16px;
+        }
+        
+        .btn-add:hover {
+            background: #059669;
+        }
+        
+        .progress {
+            background: #333;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 600px) {
+            .contact.expanded .contact-fields {
+                grid-template-columns: 1fr;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+            .contact-status {
+                display: none;
+            }
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filters select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Реклама — Декабрь 2025</h1>
+    <div class="stats">
+        Готово: <span id="done-count">0</span> / <span id="total-count">82</span> | Показано: <span id="shown-count">82</span>
+    </div>
+    
+    <div class="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div class="filters">
+        <div class="filters-row">
+            <label>🔍 Поиск:</label>
+            <input type="text" id="search-input" placeholder="Поиск по всем полям..." oninput="applyFilters()" style="flex-grow: 1; background: #1e293b; border: 1px solid #334155; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px;">
+        </div>
+        <div class="filters-row">
+            <label>Фильтр по статусу:</label>
+            <select id="filter-status" onchange="applyFilters()">
+                <option value="">Все</option>
+                <option value="no-status">Без статуса</option>
+                <option value="with-status">Только со статусами</option>
+                <option value="написать">📝 Надо написать</option>
+                <option value="написал">✉️ Написал</option>
+                <option value="ответили">💬 Ответили</option>
+                <option value="договорились">🤝 Договорились</option>
+                <option value="скинуть_пост">📤 Скинуть пост</option>
+                <option value="пост_скинул">📨 Пост скинул</option>
+                <option value="ждет_оплату">💳 Ждёт оплату</option>
+                <option value="ждем_публикацию">⏳ Ждём публикацию</option>
+                <option value="оплачено">💰 Оплачено</option>
+                <option value="опубликовано">✅ Опубликовано</option>
+                <option value="отказ">❌ Отказ</option>
+                <option value="мороз">🥶 Мороз</option>
+                <option value="не_рабочий">🚫 Контакт не рабочий</option>
+                <option value="отмена">⛔ Отмена</option>
+            </select>
+            
+            <label style="margin-left: 15px;">Сортировка:</label>
+            <select id="sort-by" onchange="applyFilters()">
+                <option value="id">По номеру</option>
+                <option value="status">По статусу</option>
+                <option value="checked">Сначала непройденные</option>
+                <option value="checked-reverse">Сначала пройденные</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn-open" onclick="openNext5()">🚀 Открыть 5 непройденных</button>
+        <button class="btn-toggle" onclick="toggleAll()">📂 Развернуть всё</button>
+        <button class="btn-save" onclick="exportProgress()">💾 Скачать</button>
+        <button class="btn-import" onclick="document.getElementById('importFile').click()">📂 Загрузить</button>
+        <button class="btn-reset" onclick="resetAll()">🔄 Сбросить</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importProgress(event)">
+    </div>
+    
+    <div class="controls">
+        <button style="background: #22c55e; color: #000;" onclick="checkAllVisible()">☑️ Отметить все видимые</button>
+        <button style="background: #f59e0b; color: #000;" onclick="uncheckAllVisible()">☐ Снять все видимые</button>
+    </div>
+
+    <div id="contacts-list"></div>
+    
+    <button class="btn-add" onclick="addNewContact()">➕ Добавить новую карточку</button>
+
+    <script>
+        let contactsData = [
+            { id: "1", name: "Aff_lab креативы", link: "https://t.me/aff_adsmanager", section: "manual" },
+            { id: "2", name: "Kos_creos", link: "https://t.me/Kos170796", section: "manual" },
+            { id: "3", name: "Уникализатор", link: "https://t.me/helpunik", section: "manual" },
+            { id: "4", name: "Генератор вайтов", link: "https://t.me/traff_land", section: "manual" },
+            { id: "5", name: "Глаз цукера", link: "https://t.me/moon_right", section: "manual" },
+            { id: "6", name: "Devils chat", link: "https://t.me/Anastasia_Devils_SMM", section: "manual" },
+            { id: "7", name: "Rocket_traffic", link: "https://t.me/Rocket_main", section: "manual" },
+            { id: "8", name: "Канал усатого", link: "https://t.me/mustage_ads", section: "manual" },
+            { id: "9", name: "Желтый веб", link: "https://t.me/babbie_valerie", section: "manual" },
+            { id: "10", name: "Cloaking House", link: "https://t.me/Denis_Cloaking_House", section: "pdf" },
+            { id: "11", name: "Hey, moneymaker!", link: "https://t.me/heymnads", section: "pdf" },
+            { id: "12", name: "CPA Hunter - вакансии", link: "https://t.me/teftelkaaa", section: "pdf" },
+            { id: "13", name: "FB-killa", link: "https://t.me/ads_fbkillla", section: "pdf" },
+            { id: "14", name: "Partnerkin", link: "https://t.me/v_partnerkin", section: "pdf" },
+            { id: "15", name: "HR - CPA/Арбитраж", link: "https://t.me/annaa_Aff", section: "pdf" },
+            { id: "16", name: "Adamant", link: "https://t.me/greensuittt", section: "pdf" },
+            { id: "17", name: "SEO канал Шакина", link: "https://t.me/mikeshakin", section: "pdf" },
+            { id: "18", name: "AQ TRAFF", link: "https://t.me/AQOWNER", section: "pdf" },
+            { id: "19", name: "Блог Адама", link: "https://t.me/adam_fb", section: "pdf" },
+            { id: "20", name: "ВЛАДИМИР АРБИТРАЖ", link: "https://t.me/vladimir_card", section: "pdf" },
+            { id: "21", name: "CPAGRAM", link: "https://t.me/akhloponin", section: "pdf" },
+            { id: "22", name: "SEO HR", link: "https://t.me/pilot_bbk", section: "pdf" },
+            { id: "23", name: "Топ IT Вакансии", link: "https://t.me/arturpanteleev", section: "pdf" },
+            { id: "24", name: "HR IT (web-hh.com)", link: "https://t.me/Na_ACG", section: "pdf" },
+            { id: "25", name: "GetIT jobs", link: "https://t.me/GETIT_AGENCY", section: "pdf" },
+            { id: "26", name: "Lenkep", link: "https://t.me/vasilisa_lev", section: "pdf" },
+            { id: "27", name: "JETLAG CHAT", link: "https://t.me/jetlagadmin", section: "pdf" },
+            { id: "28", name: "МИР КРЕАТОРОВ", link: "https://t.me/polinagorbenko", section: "pdf" },
+            { id: "29", name: "КРЕАТОРЫ", link: "https://t.me/nikitastaritsky", section: "pdf" },
+            { id: "30", name: "чатик вакансий", link: "https://t.me/heynessfe", section: "pdf" },
+            { id: "31", name: "EventHunter", link: "https://t.me/rueventjob_bot", section: "pdf" },
+            { id: "32", name: "Вакансии SMM и Digital", link: "https://t.me/denominant", section: "pdf" },
+            { id: "33", name: "Influencer Marketing", link: "https://t.me/chamiarouskaya", section: "pdf" },
+            { id: "34", name: "Digital вакансии", link: "https://t.me/mLccrew", section: "pdf" },
+            { id: "35", name: "SMM работа", link: "https://t.me/ViktorShipilov", section: "pdf" },
+            { id: "36", name: "PR-работа", link: "https://t.me/pr_job_bot", section: "pdf" },
+            { id: "37", name: "Job for Marketing", link: "https://t.me/forallmarketing", section: "pdf" },
+            { id: "38", name: "marketing jobs", link: "https://t.me/ma_riux", section: "pdf" },
+            { id: "39", name: "Копирайтер Редактор", link: "https://t.me/call_saulz", section: "pdf" },
+            { id: "40", name: "Work for writers", link: "https://t.me/Nastya_Teresh", section: "pdf" },
+            { id: "41", name: "designer_jobs", link: "https://t.me/designer_jobs", section: "pdf" },
+            { id: "42", name: "(не указано)", link: "https://t.me/+t0FXfu2dPWQwMGEy", section: "pdf" },
+            { id: "43", name: "uxui_jobs", link: "https://t.me/uxui_jobs", section: "pdf" },
+            { id: "44", name: "design_jobs_uxui", link: "https://t.me/irademidovna", section: "pdf" },
+            { id: "45", name: "CPA HUNTER", link: "https://t.me/hr_affiliate", section: "pdf" },
+            { id: "46", name: "LENKEP HR", link: "https://t.me/Arbitrazh_vakansii_rabota", section: "pdf" },
+            { id: "47", name: "IGW", link: "https://t.me/igwtel", section: "pdf" },
+            { id: "48", name: "tilttok", link: "https://t.me/belfort228", section: "old" },
+            { id: "49", name: "mrbeast_tiktok_bot", link: "https://t.me/ilham_mazi", section: "old" },
+            { id: "50", name: "rwbrr", link: "https://t.me/rawberrry", section: "old" },
+            { id: "51", name: "TraffUnique", link: "https://t.me/purrari_cash", section: "old" },
+            { id: "52", name: "ttgetcode_bot", link: "https://t.me/Chivap_Disco", section: "old" },
+            { id: "53", name: "FastDomainBot", link: "https://t.me/nightcyb", section: "old" },
+            { id: "54", name: "infatuta", link: "https://t.me/yablukko", section: "old" },
+            { id: "55", name: "tiktokillerchat", link: "https://t.me/privetgus", section: "old" },
+            { id: "56", name: "TtMailChek_Bot", link: "https://t.me/vktoi", section: "old" },
+            { id: "57", name: "k1ndstore_bot", link: "https://t.me/k1ndlzt", section: "old" },
+            { id: "58", name: "BOOMtheStorebot", link: "https://t.me/boomsups", section: "old" },
+            { id: "59", name: "ttwavestore_bot", link: "https://t.me/Loperold", section: "old" },
+            { id: "60", name: "mutedshopbot", link: "https://t.me/emptyenemy", section: "old" },
+            { id: "61", name: "TikTok_Proliv", link: "https://t.me/tt_proliv_supportt", section: "old" },
+            { id: "62", name: "MysticShorts", link: "https://t.me/metahub_support", section: "old" },
+            { id: "63", name: "iSkill", link: "https://t.me/iSkill", section: "old" },
+            { id: "64", name: "shoteamstore_bot", link: "https://t.me/shoteam_manager", section: "old" },
+            { id: "65", name: "fbfuckbook", link: "https://t.me/diaspads", section: "old" },
+            { id: "66", name: "how_team", link: "https://t.me/mssster", section: "old" },
+            { id: "67", name: "NCKAPI_bot", link: "https://t.me/Rq666", section: "old" },
+            { id: "68", name: "Rassvet (Зеленка)", link: "https://t.me/lolzlive", section: "old" },
+            { id: "69", name: "Casherino", link: "https://t.me/casherino", section: "old" },
+            { id: "70", name: "TraFFeeQ_Chat", link: "https://t.me/MaximTakahuli", section: "old" },
+            { id: "71", name: "Усатый + Гром шоп", link: "https://t.me/ubt_igorgofman", section: "old" },
+            { id: "72", name: "MagicStore", link: "https://t.me/netzahualcoyoti", section: "old" },
+            { id: "73", name: "VideoGena", link: "https://t.me/VideoGena_sup", section: "old" },
+            { id: "74", name: "SEOLookBot + GmCheckBot", link: "https://t.me/how_oo", section: "old" },
+            { id: "75", name: "METAonStorebot", link: "https://t.me/avtozaliv", section: "old" },
+            { id: "76", name: "MotiShopBot", link: "https://t.me/MotiMake", section: "old" },
+            { id: "77", name: "Bulletproof", link: "https://t.me/apple_rab", section: "old" },
+            { id: "78", name: "Midas Hosting", link: "https://t.me/midas_hostingg", section: "old" },
+            { id: "79", name: "Партнеркин", link: "https://t.me/Natali_Melnichenko", section: "old" },
+            { id: "80", name: "Mad_Cpa", link: "https://t.me/Mad_Cpa", section: "old" },
+            { id: "81", name: "AffCommunity", link: "https://t.me/affcommunity_marketing", section: "old" },
+            { id: "82", name: "CPA Words", link: "https://t.me/cpawords", section: "old" }
+        ];
+
+        const statusLabels = {
+            '': '—',
+            'написать': '📝 Надо написать',
+            'написал': '✉️ Написал',
+            'ответили': '💬 Ответили',
+            'договорились': '🤝 Договорились',
+            'скинуть_пост': '📤 Скинуть пост',
+            'пост_скинул': '📨 Пост скинул',
+            'ждет_оплату': '💳 Ждёт оплату',
+            'ждем_публикацию': '⏳ Ждём публикацию',
+            'оплачено': '💰 Оплачено',
+            'опубликовано': '✅ Опубликовано',
+            'отказ': '❌ Отказ',
+            'мороз': '🥶 Мороз',
+            'не_рабочий': '🚫 Не рабочий',
+            'отмена': '⛔ Отмена'
+        };
+
+        const statusOrder = ['написать', 'написал', 'ответили', 'договорились', 'скинуть_пост', 'пост_скинул', 'ждет_оплату', 'ждем_публикацию', 'оплачено', 'опубликовано', 'отказ', 'мороз', 'не_рабочий', 'отмена', ''];
+
+        let progressData = {};
+        let allExpanded = false;
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function renderContacts(filteredData = null) {
+            const container = document.getElementById('contacts-list');
+            container.innerHTML = '';
+            
+            const dataToRender = filteredData || contactsData;
+            let shownCount = 0;
+            
+            dataToRender.forEach((c, index) => {
+                const data = progressData[c.id] || {};
+                const isChecked = data.checked || false;
+                const statusText = statusLabels[data.status || ''] || '—';
+                const displayName = escapeHtml(data.customName || c.name);
+                const displayLink = escapeHtml(data.customLink || c.link);
+                shownCount++;
+                
+                const isFirst = index === 0;
+                const isLast = index === dataToRender.length - 1;
+                
+                let deleteBtn = '<button class="btn-delete" onclick="event.stopPropagation(); deleteContact(\'' + c.id + '\')">✕</button>';
+                
+                const html = 
+                    '<div class="contact ' + (isChecked ? 'done' : '') + '" data-id="' + c.id + '">' +
+                        '<div class="contact-header" onclick="toggleExpand(\'' + c.id + '\', event)">' +
+                            '<div class="move-buttons">' +
+                                '<button class="btn-move" ' + (isFirst ? 'disabled style="opacity:0.3"' : '') + ' onclick="event.stopPropagation(); moveContact(\'' + c.id + '\', -1)" title="Вверх">▲</button>' +
+                                '<button class="btn-move" ' + (isLast ? 'disabled style="opacity:0.3"' : '') + ' onclick="event.stopPropagation(); moveContact(\'' + c.id + '\', 1)" title="Вниз">▼</button>' +
+                            '</div>' +
+                            '<input type="checkbox" class="checkbox" ' + (isChecked ? 'checked' : '') + ' onclick="event.stopPropagation()" onchange="toggleCheck(\'' + c.id + '\')">' +
+                            '<span class="number">' + (index + 1) + '</span>' +
+                            '<input type="text" class="contact-name-input" value="' + displayName + '" onclick="event.stopPropagation()" onchange="updateField(\'' + c.id + '\', \'customName\', this.value)">' +
+                            '<span class="contact-status">' + statusText + '</span>' +
+                            '<button class="btn-open-single" onclick="event.stopPropagation(); openContact(\'' + c.id + '\')">Открыть</button>' +
+                            deleteBtn +
+                            '<span class="expand-icon">▼</span>' +
+                        '</div>' +
+                        '<div class="contact-fields">' +
+                            '<div class="field">' +
+                                '<label>Статус</label>' +
+                                '<select onchange="updateField(\'' + c.id + '\', \'status\', this.value)">' +
+                                    '<option value=""' + (!data.status ? ' selected' : '') + '>—</option>' +
+                                    '<option value="написать"' + (data.status === 'написать' ? ' selected' : '') + '>📝 Надо написать</option>' +
+                                    '<option value="написал"' + (data.status === 'написал' ? ' selected' : '') + '>✉️ Написал</option>' +
+                                    '<option value="ответили"' + (data.status === 'ответили' ? ' selected' : '') + '>💬 Ответили</option>' +
+                                    '<option value="договорились"' + (data.status === 'договорились' ? ' selected' : '') + '>🤝 Договорились</option>' +
+                                    '<option value="скинуть_пост"' + (data.status === 'скинуть_пост' ? ' selected' : '') + '>📤 Скинуть пост</option>' +
+                                    '<option value="пост_скинул"' + (data.status === 'пост_скинул' ? ' selected' : '') + '>📨 Пост скинул</option>' +
+                                    '<option value="ждет_оплату"' + (data.status === 'ждет_оплату' ? ' selected' : '') + '>💳 Ждёт оплату</option>' +
+                                    '<option value="ждем_публикацию"' + (data.status === 'ждем_публикацию' ? ' selected' : '') + '>⏳ Ждём публикацию</option>' +
+                                    '<option value="оплачено"' + (data.status === 'оплачено' ? ' selected' : '') + '>💰 Оплачено</option>' +
+                                    '<option value="опубликовано"' + (data.status === 'опубликовано' ? ' selected' : '') + '>✅ Опубликовано</option>' +
+                                    '<option value="отказ"' + (data.status === 'отказ' ? ' selected' : '') + '>❌ Отказ</option>' +
+                                    '<option value="мороз"' + (data.status === 'мороз' ? ' selected' : '') + '>🥶 Мороз</option>' +
+                                    '<option value="не_рабочий"' + (data.status === 'не_рабочий' ? ' selected' : '') + '>🚫 Контакт не рабочий</option>' +
+                                    '<option value="отмена"' + (data.status === 'отмена' ? ' selected' : '') + '>⛔ Отмена</option>' +
+                                '</select>' +
+                            '</div>' +
+                            '<div class="field">' +
+                                '<label>Цена</label>' +
+                                '<input type="text" placeholder="напр. $100 или 5000₽" value="' + escapeHtml(data.price || '') + '" onchange="updateField(\'' + c.id + '\', \'price\', this.value)">' +
+                            '</div>' +
+                            '<div class="field">' +
+                                '<label>Актуальный контакт</label>' +
+                                '<input type="text" placeholder="@username" value="' + escapeHtml(data.actualContact || '') + '" onchange="updateField(\'' + c.id + '\', \'actualContact\', this.value)">' +
+                            '</div>' +
+                            '<div class="field">' +
+                                '<label>Все контакты</label>' +
+                                '<input type="text" placeholder="@user1, @user2..." value="' + escapeHtml(data.allContacts || '') + '" onchange="updateField(\'' + c.id + '\', \'allContacts\', this.value)">' +
+                            '</div>' +
+                            '<div class="field">' +
+                                '<label>Заметки</label>' +
+                                '<input type="text" placeholder="любые заметки..." value="' + escapeHtml(data.notes || '') + '" onchange="updateField(\'' + c.id + '\', \'notes\', this.value)">' +
+                            '</div>' +
+                            '<div class="field full-width">' +
+                                '<label>Ссылка для кнопки "Открыть"</label>' +
+                                '<input type="text" placeholder="https://t.me/username" value="' + displayLink + '" onchange="updateField(\'' + c.id + '\', \'customLink\', this.value)">' +
+                            '</div>' +
+                            '<div class="field full-width">' +
+                                '<label>Площадки</label>' +
+                                '<textarea placeholder="каналы, боты, чаты..." onchange="updateField(\'' + c.id + '\', \'platforms\', this.value)">' + escapeHtml(data.platforms || '') + '</textarea>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                container.innerHTML += html;
+            });
+            
+            document.getElementById('shown-count').textContent = shownCount;
+        }
+
+        function applyFilters() {
+            const filterStatus = document.getElementById('filter-status').value;
+            const sortBy = document.getElementById('sort-by').value;
+            const searchInput = document.getElementById('search-input');
+            const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            
+            let filtered = [...contactsData];
+            
+            // Поиск по всем полям
+            if (searchQuery) {
+                filtered = filtered.filter(c => {
+                    const data = progressData[c.id] || {};
+                    const searchFields = [
+                        c.id,
+                        c.name,
+                        c.link,
+                        data.customName || '',
+                        data.customLink || '',
+                        data.status || '',
+                        data.price || '',
+                        data.actualContact || '',
+                        data.allContacts || '',
+                        data.notes || '',
+                        data.platforms || ''
+                    ].join(' ').toLowerCase();
+                    
+                    return searchFields.includes(searchQuery);
+                });
+            }
+            
+            if (filterStatus === 'no-status') {
+                filtered = filtered.filter(c => !progressData[c.id]?.status);
+            } else if (filterStatus === 'with-status') {
+                filtered = filtered.filter(c => progressData[c.id]?.status);
+            } else if (filterStatus) {
+                filtered = filtered.filter(c => progressData[c.id]?.status === filterStatus);
+            }
+            
+            if (sortBy === 'status') {
+                filtered.sort((a, b) => {
+                    const statusA = progressData[a.id]?.status || '';
+                    const statusB = progressData[b.id]?.status || '';
+                    return statusOrder.indexOf(statusA) - statusOrder.indexOf(statusB);
+                });
+            } else if (sortBy === 'checked') {
+                filtered.sort((a, b) => {
+                    const checkedA = progressData[a.id]?.checked ? 1 : 0;
+                    const checkedB = progressData[b.id]?.checked ? 1 : 0;
+                    return checkedA - checkedB;
+                });
+            } else if (sortBy === 'checked-reverse') {
+                filtered.sort((a, b) => {
+                    const checkedA = progressData[a.id]?.checked ? 1 : 0;
+                    const checkedB = progressData[b.id]?.checked ? 1 : 0;
+                    return checkedB - checkedA;
+                });
+            }
+            
+            // Сохраняем отфильтрованные ID для массовых операций
+            window.currentFilteredIds = filtered.map(c => c.id);
+            
+            renderContacts(filtered);
+        }
+
+        function toggleExpand(id, event) {
+            if (event.target.classList.contains('checkbox') || 
+                event.target.classList.contains('btn-open-single') ||
+                event.target.classList.contains('btn-delete') ||
+                event.target.classList.contains('contact-name-input')) {
+                return;
+            }
+            const contact = document.querySelector('.contact[data-id="' + id + '"]');
+            contact.classList.toggle('expanded');
+        }
+
+        function toggleAll() {
+            allExpanded = !allExpanded;
+            const contacts = document.querySelectorAll('.contact');
+            const btn = document.querySelector('.btn-toggle');
+            
+            contacts.forEach(contact => {
+                if (allExpanded) {
+                    contact.classList.add('expanded');
+                } else {
+                    contact.classList.remove('expanded');
+                }
+            });
+            
+            btn.textContent = allExpanded ? '📁 Свернуть всё' : '📂 Развернуть всё';
+        }
+
+        function toggleCheck(id) {
+            if (!progressData[id]) progressData[id] = {};
+            progressData[id].checked = !progressData[id].checked;
+            
+            const contact = document.querySelector('.contact[data-id="' + id + '"]');
+            if (progressData[id].checked) {
+                contact.classList.add('done');
+            } else {
+                contact.classList.remove('done');
+            }
+            
+            updateStats();
+            saveToLocalStorage();
+        }
+
+        function updateField(id, field, value) {
+            if (!progressData[id]) progressData[id] = {};
+            progressData[id][field] = value;
+            
+            if (field === 'status') {
+                const contact = document.querySelector('.contact[data-id="' + id + '"]');
+                const statusSpan = contact.querySelector('.contact-status');
+                statusSpan.textContent = statusLabels[value] || '—';
+            }
+            
+            saveToLocalStorage();
+        }
+
+        function openContact(id) {
+            const contact = contactsData.find(c => c.id === id);
+            const data = progressData[id] || {};
+            const link = data.customLink || contact?.link || '';
+            if (link) {
+                window.open(link, '_blank');
+            } else {
+                alert('Ссылка не указана. Разверните карточку и добавьте ссылку.');
+            }
+        }
+
+        function addNewContact() {
+            let maxId = 0;
+            contactsData.forEach(c => {
+                const num = parseInt(c.id);
+                if (num > maxId) maxId = num;
+            });
+            Object.keys(progressData).forEach(id => {
+                const num = parseInt(id);
+                if (num > maxId) maxId = num;
+            });
+            
+            const newId = String(maxId + 1);
+            
+            contactsData.push({
+                id: newId,
+                name: "Новый контакт",
+                link: "",
+                section: "new"
+            });
+            
+            progressData[newId] = {
+                checked: false,
+                status: "написать",
+                customName: "Новый контакт",
+                isCustom: true
+            };
+            
+            saveToLocalStorage();
+            applyFilters();
+            updateStats();
+            
+            setTimeout(() => {
+                const newContact = document.querySelector('.contact[data-id="' + newId + '"]');
+                if (newContact) {
+                    newContact.scrollIntoView({ behavior: 'smooth' });
+                    newContact.classList.add('expanded');
+                }
+            }, 100);
+        }
+
+        function deleteContact(id) {
+            if (!confirm('Удалить эту карточку?')) return;
+            
+            const index = contactsData.findIndex(c => c.id === id);
+            if (index > -1) {
+                contactsData.splice(index, 1);
+            }
+            
+            delete progressData[id];
+            
+            saveToLocalStorage();
+            applyFilters();
+            updateStats();
+        }
+
+        function saveToLocalStorage() {
+            const customContacts = contactsData.filter(c => c.section === 'new');
+            const contactsOrder = contactsData.map(c => c.id);
+            localStorage.setItem('ads_progress_v3', JSON.stringify({
+                progressData: progressData,
+                customContacts: customContacts,
+                contactsOrder: contactsOrder
+            }));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('ads_progress_v3');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.progressData) {
+                        progressData = data.progressData;
+                    }
+                    if (data.customContacts) {
+                        data.customContacts.forEach(c => {
+                            if (!contactsData.find(existing => existing.id === c.id)) {
+                                contactsData.push(c);
+                            }
+                        });
+                    }
+                    // Загрузка порядка
+                    if (data.contactsOrder && Array.isArray(data.contactsOrder)) {
+                        applyContactsOrder(data.contactsOrder);
+                    }
+                } catch(e) {
+                    console.error('Error loading from localStorage', e);
+                }
+            }
+            
+            // Также пробуем загрузить из старого формата
+            const oldSaved = localStorage.getItem('ads_progress_v2');
+            if (oldSaved && !saved) {
+                try {
+                    progressData = JSON.parse(oldSaved);
+                } catch(e) {}
+            }
+        }
+        
+        function applyContactsOrder(order) {
+            contactsData.sort((a, b) => {
+                const indexA = order.indexOf(a.id);
+                const indexB = order.indexOf(b.id);
+                if (indexA === -1) return 1;
+                if (indexB === -1) return -1;
+                return indexA - indexB;
+            });
+        }
+
+        function exportProgress() {
+            const customContacts = contactsData.filter(c => c.section === 'new');
+            const contactsOrder = contactsData.map(c => c.id);
+            
+            const data = {
+                date: new Date().toISOString(),
+                version: 3,
+                contacts: progressData,
+                customContacts: customContacts,
+                contactsOrder: contactsOrder
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'progress_' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importProgress(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Поддержка разных форматов
+                    if (data.checked && Array.isArray(data.checked)) {
+                        // Старый формат v1
+                        progressData = {};
+                        data.checked.forEach(id => {
+                            progressData[id] = { checked: true };
+                        });
+                    } else if (data.contacts) {
+                        // Формат v2 и v3
+                        progressData = data.contacts;
+                    }
+                    
+                    // Загрузка кастомных контактов
+                    if (data.customContacts && Array.isArray(data.customContacts)) {
+                        data.customContacts.forEach(c => {
+                            if (!contactsData.find(existing => existing.id === c.id)) {
+                                contactsData.push(c);
+                            }
+                        });
+                    }
+                    
+                    // Загрузка порядка
+                    if (data.contactsOrder && Array.isArray(data.contactsOrder)) {
+                        applyContactsOrder(data.contactsOrder);
+                    }
+                    
+                    saveToLocalStorage();
+                    applyFilters();
+                    updateStats();
+                    
+                    const doneCount = Object.values(progressData).filter(c => c && c.checked).length;
+                    alert('✅ Прогресс загружен! Готово: ' + doneCount);
+                } catch (err) {
+                    alert('❌ Ошибка чтения файла: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function resetAll() {
+            if (confirm('Точно сбросить весь прогресс? Все данные будут удалены!')) {
+                progressData = {};
+                // Удаляем кастомные контакты
+                contactsData = contactsData.filter(c => c.section !== 'new');
+                localStorage.removeItem('ads_progress_v3');
+                localStorage.removeItem('ads_progress_v2');
+                applyFilters();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const total = contactsData.length;
+            const done = Object.values(progressData).filter(c => c && c.checked).length;
+            
+            document.getElementById('done-count').textContent = done;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('progress-bar').style.width = (done / total * 100) + '%';
+        }
+
+        function openNext5() {
+            const uncheckedIds = contactsData
+                .filter(c => !progressData[c.id]?.checked)
+                .slice(0, 5);
+            
+            uncheckedIds.forEach(c => {
+                const data = progressData[c.id] || {};
+                const link = data.customLink || c.link;
+                if (link) window.open(link, '_blank');
+            });
+        }
+        
+        function checkAllVisible() {
+            const ids = window.currentFilteredIds || contactsData.map(c => c.id);
+            if (!confirm('Отметить все ' + ids.length + ' видимых карточек как пройденные?')) return;
+            
+            ids.forEach(id => {
+                if (!progressData[id]) progressData[id] = {};
+                progressData[id].checked = true;
+            });
+            
+            saveToLocalStorage();
+            applyFilters();
+            updateStats();
+        }
+        
+        function uncheckAllVisible() {
+            const ids = window.currentFilteredIds || contactsData.map(c => c.id);
+            if (!confirm('Снять галочки со всех ' + ids.length + ' видимых карточек?')) return;
+            
+            ids.forEach(id => {
+                if (progressData[id]) {
+                    progressData[id].checked = false;
+                }
+            });
+            
+            saveToLocalStorage();
+            applyFilters();
+            updateStats();
+        }
+
+        // Перемещение карточек
+        function moveContact(id, direction) {
+            // Работаем с основным массивом, не с отфильтрованным
+            const index = contactsData.findIndex(c => c.id === id);
+            if (index === -1) return;
+            
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= contactsData.length) return;
+            
+            // Меняем местами
+            const temp = contactsData[index];
+            contactsData[index] = contactsData[newIndex];
+            contactsData[newIndex] = temp;
+            
+            saveToLocalStorage();
+            applyFilters();
+        }
+
+        // Инициализация
+        loadFromLocalStorage();
+        applyFilters();
+        updateStats();
+    </script>
+</body>
+</html>
