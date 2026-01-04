@@ -578,14 +578,25 @@
     </div>
 
     <script>
-        // Пароль для входа
-        const APP_PASSWORD = 'moltea';
+        // Пароль захеширован (SHA-256)
+        const APP_PASSWORD_HASH = '8b2e0b7e6bdb907a9b7e1f8f0c9d8e3a2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e';
         
-        function checkPassword() {
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + 'tracker_salt_2025');
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        async function checkPassword() {
             const input = document.getElementById('password-input');
             const error = document.getElementById('login-error');
             
-            if (input.value === APP_PASSWORD) {
+            const inputHash = await hashPassword(input.value);
+            
+            // Хеш пароля "moltea"
+            if (inputHash === '78d41d91d49fe72a5b1d3f53a31d5b6812e292706a58f19274b571d0441da3aa') {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('app-content').style.display = 'block';
                 localStorage.setItem('tracker_auth', 'true');
