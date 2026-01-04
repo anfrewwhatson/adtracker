@@ -18,6 +18,58 @@
             margin: 0 auto;
         }
         
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        
+        .login-screen h1 {
+            margin-bottom: 30px;
+        }
+        
+        .login-screen input {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 250px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .login-screen input:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .login-screen button {
+            background: #4ade80;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .login-screen button:hover {
+            background: #22c55e;
+        }
+        
+        .login-error {
+            color: #ef4444;
+            margin-top: 15px;
+        }
+        
+        .app-content {
+            display: none;
+        }
+        
         h1 {
             text-align: center;
             color: #fff;
@@ -396,9 +448,6 @@
             button {
                 width: 100%;
             }
-            .contact-status {
-                display: none;
-            }
             .filters-row {
                 flex-direction: column;
                 align-items: stretch;
@@ -406,10 +455,59 @@
             .filters select {
                 width: 100%;
             }
+            .contact-header {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            .move-buttons {
+                flex-direction: row;
+                margin-right: 8px;
+            }
+            .contact-name-input {
+                flex-basis: 100%;
+                order: 10;
+                margin-top: 8px;
+                font-size: 14px;
+            }
+            .contact-status {
+                display: block;
+                order: 11;
+                margin-top: 5px;
+                flex-basis: auto;
+            }
+            .checkbox {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }
+            .number {
+                margin-right: 8px;
+            }
+            .btn-open-single {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+            .btn-delete {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+            .expand-icon {
+                margin-left: auto;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Экран входа -->
+    <div class="login-screen" id="login-screen">
+        <h1>🔐 Вход</h1>
+        <input type="password" id="password-input" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')checkPassword()">
+        <button onclick="checkPassword()">Войти</button>
+        <div class="login-error" id="login-error"></div>
+    </div>
+    
+    <!-- Основное приложение -->
+    <div class="app-content" id="app-content">
     <h1>📋 Реклама — Декабрь 2025</h1>
     
     <div class="sync-status" id="sync-status">⏳ Загрузка...</div>
@@ -477,8 +575,33 @@
     <div id="contacts-list"></div>
     
     <button class="btn-add" onclick="addNewContact()">➕ Добавить новую карточку</button>
+    </div>
 
     <script>
+        // Пароль для входа
+        const APP_PASSWORD = 'moltea';
+        
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const error = document.getElementById('login-error');
+            
+            if (input.value === APP_PASSWORD) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                localStorage.setItem('tracker_auth', 'true');
+                initApp();
+            } else {
+                error.textContent = '❌ Неверный пароль';
+                input.value = '';
+            }
+        }
+        
+        // Проверка сохранённой авторизации
+        if (localStorage.getItem('tracker_auth') === 'true') {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+        }
+        
         // JSONBin.io конфигурация
         const JSONBIN_BIN_ID = '6959bde543b1c97be91779ad';
         const JSONBIN_API_KEY = '$2a$10$Q4vUhcjpPv1qAUP/QF5yVO7.tk1ltIqMHCzkeSrvUXcA9CGm00XL.';
@@ -1118,11 +1241,18 @@
             applyFilters();
         }
 
-        // Инициализация
-        loadFromCloud().then(() => {
-            applyFilters();
-            updateStats();
-        });
+        // Инициализация приложения
+        function initApp() {
+            loadFromCloud().then(() => {
+                applyFilters();
+                updateStats();
+            });
+        }
+        
+        // Автозапуск если уже авторизован
+        if (localStorage.getItem('tracker_auth') === 'true') {
+            initApp();
+        }
     </script>
 </body>
 </html>
