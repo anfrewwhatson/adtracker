@@ -1272,12 +1272,41 @@
             scheduleSaveToCloud();
         }
 
+        const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        function tgDeepLink(raw) {
+            if (!raw) return raw;
+            let s = raw.trim();
+            if (s.startsWith('tg://')) return s;
+            // strip leading @ -> bare username
+            if (/^@[A-Za-z0-9_]{3,}$/.test(s)) return 'tg://resolve?domain=' + s.slice(1);
+            // normalize https://t.me / https://telegram.me / http
+            const m = s.match(/^(?:https?:\/\/)?(?:t\.me|telegram\.me|telegram\.dog)\/(.+)$/i);
+            if (!m) return s;
+            let path = m[1].replace(/^\/+/, '').split('?')[0].split('#')[0];
+            if (!path) return s;
+            // invite link: +xxxx or joinchat/xxxx
+            if (path.startsWith('+')) return 'tg://join?invite=' + encodeURIComponent(path.slice(1));
+            if (/^joinchat\//i.test(path)) return 'tg://join?invite=' + encodeURIComponent(path.split('/')[1] || '');
+            // addlist
+            if (/^addlist\//i.test(path)) return 'tg://addlist?slug=' + encodeURIComponent(path.split('/')[1] || '');
+            // username or username/post
+            const parts = path.split('/');
+            const user = parts[0];
+            if (!/^[A-Za-z0-9_]{3,}$/.test(user)) return s;
+            const post = parts[1] && /^\d+$/.test(parts[1]) ? parts[1] : null;
+            return 'tg://resolve?domain=' + user + (post ? '&post=' + post : '');
+        }
+        function openLink(rawLink) {
+            if (!rawLink) return;
+            const target = isMobile ? tgDeepLink(rawLink) : rawLink;
+            window.open(target, '_blank');
+        }
         function openContact(id) {
             const contact = contactsData.find(c => c.id === id);
             const data = progressData[id] || {};
             const link = data.customLink || contact?.link || '';
             if (link) {
-                window.open(link, '_blank');
+                openLink(link);
             } else {
                 alert('Ссылка не указана. Разверните карточку и добавьте ссылку.');
             }
@@ -1457,7 +1486,7 @@
             uncheckedIds.forEach(c => {
                 const data = progressData[c.id] || {};
                 const link = data.customLink || c.link;
-                if (link) window.open(link, '_blank');
+                if (link) openLink(link);
             });
         }
         
