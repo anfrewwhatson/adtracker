@@ -438,6 +438,153 @@
             transition: width 0.3s;
         }
 
+        .progress.segmented { display: flex; background: #0f172a; }
+        .progress-seg { height: 100%; transition: width 0.4s ease; }
+        .progress-seg.todo { background: linear-gradient(90deg, #475569, #64748b); }
+        .progress-seg.active { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-seg.done { background: linear-gradient(90deg, #4ade80, #22c55e); }
+
+        .stats-breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            font-size: 13px;
+            color: #888;
+            margin: 6px 0 14px;
+        }
+        .stats-breakdown .seg-stat { display: inline-flex; align-items: center; gap: 5px; }
+        .stats-breakdown .seg-stat .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .stats-breakdown .seg-stat .num { color: #fff; font-weight: bold; }
+        .stats-breakdown .todo-c .dot { background: #64748b; }
+        .stats-breakdown .active-c .dot { background: #fbbf24; }
+        .stats-breakdown .done-c .dot { background: #4ade80; }
+
+        .status-icon {
+            width: 13px;
+            height: 13px;
+            vertical-align: -2px;
+            margin-right: 3px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .contact-status { display: inline-flex; align-items: center; }
+
+        .drag-handle {
+            cursor: grab;
+            color: #475569;
+            padding: 6px 4px;
+            user-select: none;
+            font-size: 16px;
+            line-height: 1;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+        .drag-handle:hover { color: #4ade80; }
+        .drag-handle:active { cursor: grabbing; }
+        .contact.sortable-ghost { opacity: 0.35; }
+        .contact.sortable-chosen { background: #1f3460; }
+        .contact.sortable-drag { box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+
+        .card-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #334155;
+        }
+        .card-actions button {
+            flex: 1;
+            padding: 12px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-copy-offer { background: #a855f7; color: white; }
+        .btn-copy-offer:hover { background: #9333ea; }
+        .btn-open-tg { background: #3b82f6; color: white; }
+        .btn-open-tg:hover { background: #2563eb; }
+        .btn-done { background: #4ade80; color: #000; }
+        .btn-done:hover { background: #22c55e; }
+        .contact.done .btn-done { background: #64748b; color: #fff; }
+        .contact.done .btn-done:hover { background: #475569; }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #4ade80;
+            color: #000;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;
+            max-width: 90vw;
+            text-align: center;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.err { background: #ef4444; color: #fff; }
+
+        body.select-mode .contact-header { cursor: pointer; }
+        body.select-mode .drag-handle { opacity: 0.3; pointer-events: none; }
+        .contact.selected {
+            background: #1e3a8a !important;
+            outline: 2px solid #60a5fa;
+            outline-offset: -2px;
+        }
+        .contact.selected.done { background: #1e3a8a !important; }
+
+        .btn-select-mode { background: #6366f1; color: white; }
+        .btn-select-mode:hover { background: #4f46e5; }
+        body.select-mode .btn-select-mode { background: #ef4444; }
+
+        .bulk-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.45);
+            transform: translateY(100%);
+            transition: transform 0.25s ease;
+            flex-wrap: wrap;
+        }
+        .bulk-bar.show { transform: translateY(0); }
+        .bulk-bar .count { font-weight: bold; margin-right: auto; }
+        .bulk-bar select, .bulk-bar button {
+            padding: 9px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .bulk-bar select { background: #fff; color: #000; }
+        .bulk-bar .bulk-delete { background: #ef4444; color: white; }
+        .bulk-bar .bulk-delete:hover { background: #dc2626; }
+        .bulk-bar .bulk-close { background: transparent; color: white; font-size: 18px; padding: 6px 10px; }
+
         @media (max-width: 600px) {
             .contact.expanded .contact-fields {
                 grid-template-columns: 1fr;
@@ -520,8 +667,16 @@
                 margin-left: 0;
                 font-size: 14px;
             }
+            .card-actions { flex-direction: column; gap: 6px; }
+            .card-actions button { width: 100%; padding: 14px; font-size: 16px; }
+            .stats-breakdown { font-size: 11px; gap: 10px; }
+            .bulk-bar { gap: 6px; padding: 10px; }
+            .bulk-bar .count { width: 100%; margin-bottom: 4px; }
+            .bulk-bar select, .bulk-bar button { font-size: 13px; padding: 8px 10px; flex: 1; }
+            .toast { bottom: 100px; font-size: 14px; padding: 10px 18px; }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <!-- Экран входа -->
@@ -541,9 +696,16 @@
     <div class="stats">
         Готово: <span id="done-count">0</span> / <span id="total-count">82</span> | Показано: <span id="shown-count">82</span>
     </div>
-    
-    <div class="progress">
-        <div class="progress-bar" id="progress-bar"></div>
+
+    <div class="progress segmented">
+        <div class="progress-seg todo" id="progress-seg-todo"></div>
+        <div class="progress-seg active" id="progress-seg-active"></div>
+        <div class="progress-seg done" id="progress-seg-done"></div>
+    </div>
+    <div class="stats-breakdown">
+        <span class="seg-stat todo-c"><span class="dot"></span>Надо написать: <span class="num" id="stat-todo">0</span></span>
+        <span class="seg-stat active-c"><span class="dot"></span>В работе: <span class="num" id="stat-active">0</span></span>
+        <span class="seg-stat done-c"><span class="dot"></span>Опубликовано: <span class="num" id="stat-done">0</span></span>
     </div>
     
     <div class="filters">
@@ -594,14 +756,39 @@
     </div>
     
     <div class="controls">
+        <button class="btn-select-mode" id="select-mode-btn" onclick="toggleSelectMode()">☑️ Выбрать несколько</button>
         <button style="background: #22c55e; color: #000;" onclick="checkAllVisible()">☑️ Отметить все видимые</button>
         <button style="background: #f59e0b; color: #000;" onclick="uncheckAllVisible()">☐ Снять все видимые</button>
     </div>
 
     <div id="contacts-list"></div>
-    
+
     <button class="btn-add" onclick="addNewContact()">➕ Добавить новую карточку</button>
     </div>
+
+    <div class="bulk-bar" id="bulk-bar">
+        <span class="count" id="bulk-count">0 выделено</span>
+        <select id="bulk-status-select" onchange="if(this.value){bulkSetStatus(this.value);this.value='';}">
+            <option value="">Сменить статус…</option>
+            <option value="написать">Надо написать</option>
+            <option value="написал">Написал</option>
+            <option value="ответили">Ответили</option>
+            <option value="договорились">Договорились</option>
+            <option value="скинуть_пост">Скинуть пост</option>
+            <option value="пост_скинул">Пост скинул</option>
+            <option value="ждет_оплату">Ждёт оплату</option>
+            <option value="ждем_публикацию">Ждём публикацию</option>
+            <option value="оплачено">Оплачено</option>
+            <option value="опубликовано">Опубликовано</option>
+            <option value="отказ">Отказ</option>
+            <option value="мороз">Мороз</option>
+            <option value="не_рабочий">Не рабочий</option>
+            <option value="отмена">Отмена</option>
+        </select>
+        <button class="bulk-delete" onclick="bulkDelete()">🗑️ Удалить</button>
+        <button class="bulk-close" onclick="exitSelectMode()">✕</button>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <script>
         // Пароль захеширован (SHA-256)
@@ -702,10 +889,69 @@
 
         const statusOrder = ['написать', 'написал', 'ответили', 'договорились', 'скинуть_пост', 'пост_скинул', 'ждет_оплату', 'ждем_публикацию', 'оплачено', 'опубликовано', 'отказ', 'мороз', 'не_рабочий', 'отмена', ''];
 
+        const SVG_ATTR = 'class="status-icon" viewBox="0 0 24 24"';
+        const statusIcons = {
+            '': '<svg ' + SVG_ATTR + '><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+            'написать': '<svg ' + SVG_ATTR + '><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+            'написал': '<svg ' + SVG_ATTR + '><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+            'ответили': '<svg ' + SVG_ATTR + '><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+            'договорились': '<svg ' + SVG_ATTR + '><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+            'скинуть_пост': '<svg ' + SVG_ATTR + '><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+            'пост_скинул': '<svg ' + SVG_ATTR + '><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+            'ждет_оплату': '<svg ' + SVG_ATTR + '><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+            'ждем_публикацию': '<svg ' + SVG_ATTR + '><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            'оплачено': '<svg ' + SVG_ATTR + '><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+            'опубликовано': '<svg ' + SVG_ATTR + '><polyline points="20 6 9 17 4 12"/></svg>',
+            'отказ': '<svg ' + SVG_ATTR + '><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+            'мороз': '<svg ' + SVG_ATTR + '><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg>',
+            'не_рабочий': '<svg ' + SVG_ATTR + '><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
+            'отмена': '<svg ' + SVG_ATTR + '><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+        };
+        const statusColors = {
+            '': '#334155',
+            'написать': '#a855f7',
+            'написал': '#3b82f6',
+            'ответили': '#06b6d4',
+            'договорились': '#22c55e',
+            'скинуть_пост': '#f59e0b',
+            'пост_скинул': '#f59e0b',
+            'ждет_оплату': '#eab308',
+            'ждем_публикацию': '#eab308',
+            'оплачено': '#10b981',
+            'опубликовано': '#4ade80',
+            'отказ': '#ef4444',
+            'мороз': '#64748b',
+            'не_рабочий': '#dc2626',
+            'отмена': '#7f1d1d'
+        };
+        const ACTIVE_STATUSES = new Set(['написал','ответили','договорились','скинуть_пост','пост_скинул','ждет_оплату','ждем_публикацию','оплачено']);
+        function statusCategory(s) {
+            if (s === 'опубликовано') return 'done';
+            if (ACTIVE_STATUSES.has(s)) return 'active';
+            return 'todo';
+        }
+        function statusLabelClean(s) {
+            const full = statusLabels[s || ''] || '—';
+            return full.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2700}-\u{27BF}✅-❎⚠✨]+\s*/u, '');
+        }
+
+        const OFFER_TEMPLATE = "Привет хотим купить рекламу!\n\n" +
+            "Напиши пожалуйста актуальные варианты размещения по максимуму.\n\n" +
+            "Дата: ориентир на Четверг 11.06.2026\n" +
+            "Время: лучшее по активу на ваших ресурсах (думаю начиная с 13:00-14:00 до 20:00)\n\n" +
+            "⚠️Жду:\n" +
+            "- варианты размещения с ценами\n" +
+            "- сумму для оплаты, адрес usdt trc20 \n" +
+            "- подтверждение что запрошенная дата доступна для брони (!)\n\n" +
+            "Тематика фейк гемблинг проект с возможностью ставить казино на свой домен и панелью с автоматическими выплатами.";
+
         let progressData = {};
         let allExpanded = false;
         let syncTimeout = null;
         let isSyncing = false;
+        let selectMode = false;
+        let selectedIds = new Set();
+        let sortableInstance = null;
 
         // ========== СИНХРОНИЗАЦИЯ ==========
         
@@ -812,26 +1058,31 @@
         function renderContacts(filteredData = null) {
             const container = document.getElementById('contacts-list');
             container.innerHTML = '';
-            
+
             const dataToRender = filteredData || contactsData;
             let shownCount = 0;
-            
+
             dataToRender.forEach((c, index) => {
                 const data = progressData[c.id] || {};
                 const isChecked = data.checked || false;
-                const statusText = statusLabels[data.status || ''] || '—';
+                const curStatus = data.status || '';
+                const statusIcon = statusIcons[curStatus] || statusIcons[''];
+                const statusLabel = statusLabelClean(curStatus);
+                const statusColor = statusColors[curStatus] || '#334155';
                 const displayName = escapeHtml(data.customName || c.name);
                 const displayLink = escapeHtml(data.customLink || c.link);
+                const isSelected = selectedIds.has(c.id);
                 shownCount++;
-                
+
                 const isFirst = index === 0;
                 const isLast = index === dataToRender.length - 1;
-                
+
                 let deleteBtn = '<button class="btn-delete" onclick="event.stopPropagation(); deleteContact(\'' + c.id + '\')">✕</button>';
-                
-                const html = 
-                    '<div class="contact ' + (isChecked ? 'done' : '') + '" data-id="' + c.id + '">' +
+
+                const html =
+                    '<div class="contact ' + (isChecked ? 'done ' : '') + (isSelected ? 'selected' : '') + '" data-id="' + c.id + '">' +
                         '<div class="contact-header" onclick="toggleExpand(\'' + c.id + '\', event)">' +
+                            '<span class="drag-handle" title="Перетащить">⋮⋮</span>' +
                             '<div class="move-buttons">' +
                                 '<button class="btn-move" ' + (isFirst ? 'disabled style="opacity:0.3"' : '') + ' onclick="event.stopPropagation(); moveContact(\'' + c.id + '\', -1)" title="Вверх">▲</button>' +
                                 '<button class="btn-move" ' + (isLast ? 'disabled style="opacity:0.3"' : '') + ' onclick="event.stopPropagation(); moveContact(\'' + c.id + '\', 1)" title="Вниз">▼</button>' +
@@ -839,7 +1090,7 @@
                             '<input type="checkbox" class="checkbox" ' + (isChecked ? 'checked' : '') + ' onclick="event.stopPropagation()" onchange="toggleCheck(\'' + c.id + '\')">' +
                             '<span class="number">' + (index + 1) + '</span>' +
                             '<input type="text" class="contact-name-input" value="' + displayName + '" onclick="event.stopPropagation()" onchange="updateField(\'' + c.id + '\', \'customName\', this.value)">' +
-                            '<span class="contact-status">' + statusText + '</span>' +
+                            '<span class="contact-status" style="background:' + statusColor + ';color:#fff;">' + statusIcon + statusLabel + '</span>' +
                             '<button class="btn-open-single" onclick="event.stopPropagation(); openContact(\'' + c.id + '\')">Открыть</button>' +
                             deleteBtn +
                             '<span class="expand-icon">▼</span>' +
@@ -889,12 +1140,18 @@
                                 '<label>Площадки</label>' +
                                 '<textarea placeholder="каналы, боты, чаты..." onchange="updateField(\'' + c.id + '\', \'platforms\', this.value)">' + escapeHtml(data.platforms || '') + '</textarea>' +
                             '</div>' +
+                            '<div class="card-actions">' +
+                                '<button class="btn-copy-offer" onclick="event.stopPropagation(); copyOffer(\'' + c.id + '\')">📋 Копировать оффер</button>' +
+                                '<button class="btn-open-tg" onclick="event.stopPropagation(); openContact(\'' + c.id + '\')">📞 Открыть в TG</button>' +
+                                '<button class="btn-done" onclick="event.stopPropagation(); markDone(\'' + c.id + '\')">' + (isChecked ? '↩️ Не готово' : '✓ Готово') + '</button>' +
+                            '</div>' +
                         '</div>' +
                     '</div>';
                 container.innerHTML += html;
             });
-            
+
             document.getElementById('shown-count').textContent = shownCount;
+            initSortable();
         }
 
         function applyFilters() {
@@ -960,11 +1217,11 @@
         }
 
         function toggleExpand(id, event) {
-            if (event.target.classList.contains('checkbox') || 
-                event.target.classList.contains('btn-open-single') ||
-                event.target.classList.contains('btn-delete') ||
-                event.target.classList.contains('btn-move') ||
-                event.target.classList.contains('contact-name-input')) {
+            const tag = event.target.tagName;
+            if (tag === 'INPUT' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'TEXTAREA' || tag === 'OPTION') return;
+            if (event.target.classList.contains('drag-handle')) return;
+            if (selectMode) {
+                toggleCardSelection(id);
                 return;
             }
             const contact = document.querySelector('.contact[data-id="' + id + '"]');
@@ -1167,12 +1424,29 @@
         }
 
         function updateStats() {
-            const total = contactsData.length;
+            const total = contactsData.length || 1;
             const done = Object.values(progressData).filter(c => c && c.checked).length;
-            
             document.getElementById('done-count').textContent = done;
-            document.getElementById('total-count').textContent = total;
-            document.getElementById('progress-bar').style.width = (done / total * 100) + '%';
+            document.getElementById('total-count').textContent = contactsData.length;
+
+            let cTodo = 0, cActive = 0, cDone = 0;
+            contactsData.forEach(c => {
+                const cat = statusCategory((progressData[c.id] || {}).status || '');
+                if (cat === 'done') cDone++;
+                else if (cat === 'active') cActive++;
+                else cTodo++;
+            });
+
+            const pTodo = (cTodo / total * 100).toFixed(2);
+            const pActive = (cActive / total * 100).toFixed(2);
+            const pDone = (cDone / total * 100).toFixed(2);
+            document.getElementById('progress-seg-todo').style.width = pTodo + '%';
+            document.getElementById('progress-seg-active').style.width = pActive + '%';
+            document.getElementById('progress-seg-done').style.width = pDone + '%';
+
+            document.getElementById('stat-todo').textContent = cTodo;
+            document.getElementById('stat-active').textContent = cActive;
+            document.getElementById('stat-done').textContent = cDone;
         }
 
         function openNext5() {
@@ -1228,6 +1502,132 @@
             contactsData[index] = contactsData[newIndex];
             contactsData[newIndex] = temp;
             
+            scheduleSaveToCloud();
+            applyFilters();
+        }
+
+        // ========== TOAST ==========
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = msg;
+            toast.className = 'toast show' + (type === 'err' ? ' err' : '');
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        // ========== OFFER TEMPLATE ==========
+        async function copyOffer(id) {
+            try {
+                await navigator.clipboard.writeText(OFFER_TEMPLATE);
+                showToast('📋 Оффер скопирован в буфер');
+            } catch (e) {
+                const ta = document.createElement('textarea');
+                ta.value = OFFER_TEMPLATE;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); showToast('📋 Оффер скопирован'); }
+                catch (err) { showToast('❌ Не удалось скопировать', 'err'); }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ========== MARK DONE ==========
+        function markDone(id) {
+            if (!progressData[id]) progressData[id] = {};
+            progressData[id].checked = !progressData[id].checked;
+            const contact = document.querySelector('.contact[data-id="' + id + '"]');
+            if (contact) {
+                contact.classList.toggle('done', progressData[id].checked);
+                const cb = contact.querySelector('.checkbox');
+                if (cb) cb.checked = progressData[id].checked;
+                const btn = contact.querySelector('.btn-done');
+                if (btn) btn.textContent = progressData[id].checked ? '↩️ Не готово' : '✓ Готово';
+            }
+            scheduleSaveToCloud();
+            updateStats();
+        }
+
+        // ========== MULTI-SELECT ==========
+        function toggleSelectMode() {
+            selectMode = !selectMode;
+            document.body.classList.toggle('select-mode', selectMode);
+            const btn = document.getElementById('select-mode-btn');
+            btn.textContent = selectMode ? '✕ Отмена выбора' : '☑️ Выбрать несколько';
+            if (!selectMode) {
+                selectedIds.clear();
+                updateBulkBar();
+                applyFilters();
+            }
+            if (sortableInstance) sortableInstance.option('disabled', selectMode);
+        }
+        function exitSelectMode() {
+            if (selectMode) toggleSelectMode();
+        }
+        function toggleCardSelection(id) {
+            if (selectedIds.has(id)) selectedIds.delete(id);
+            else selectedIds.add(id);
+            const contact = document.querySelector('.contact[data-id="' + id + '"]');
+            if (contact) contact.classList.toggle('selected', selectedIds.has(id));
+            updateBulkBar();
+        }
+        function updateBulkBar() {
+            const bar = document.getElementById('bulk-bar');
+            const count = selectedIds.size;
+            document.getElementById('bulk-count').textContent = count + ' выделено';
+            bar.classList.toggle('show', count > 0);
+        }
+        function bulkSetStatus(newStatus) {
+            if (selectedIds.size === 0) return;
+            selectedIds.forEach(id => {
+                if (!progressData[id]) progressData[id] = {};
+                progressData[id].status = newStatus;
+            });
+            showToast('Статус "' + statusLabelClean(newStatus) + '" поставлен для ' + selectedIds.size);
+            scheduleSaveToCloud();
+            applyFilters();
+            updateStats();
+        }
+        function bulkDelete() {
+            if (selectedIds.size === 0) return;
+            if (!confirm('Удалить ' + selectedIds.size + ' карточек безвозвратно?')) return;
+            const ids = Array.from(selectedIds);
+            ids.forEach(id => {
+                const idx = contactsData.findIndex(c => c.id === id);
+                if (idx > -1) contactsData.splice(idx, 1);
+                delete progressData[id];
+            });
+            selectedIds.clear();
+            updateBulkBar();
+            scheduleSaveToCloud();
+            applyFilters();
+            updateStats();
+            showToast('Удалено: ' + ids.length);
+        }
+
+        // ========== DRAG-N-DROP ==========
+        function initSortable() {
+            const container = document.getElementById('contacts-list');
+            if (!container || typeof Sortable === 'undefined') return;
+            if (sortableInstance) { sortableInstance.destroy(); sortableInstance = null; }
+            sortableInstance = Sortable.create(container, {
+                handle: '.drag-handle',
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                disabled: selectMode,
+                onEnd: handleReorder
+            });
+        }
+        function handleReorder() {
+            const visibleIds = Array.from(document.querySelectorAll('#contacts-list .contact')).map(el => el.dataset.id);
+            const visibleSet = new Set(visibleIds);
+            const idMap = Object.fromEntries(contactsData.map(c => [c.id, c]));
+            let vIdx = 0;
+            contactsData = contactsData.map(c => visibleSet.has(c.id) ? idMap[visibleIds[vIdx++]] : c);
             scheduleSaveToCloud();
             applyFilters();
         }
