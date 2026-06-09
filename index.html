@@ -585,6 +585,72 @@
         .bulk-bar .bulk-delete:hover { background: #dc2626; }
         .bulk-bar .bulk-close { background: transparent; color: white; font-size: 18px; padding: 6px 10px; }
 
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 2px 8px;
+            margin-top: 8px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        .filter-chips::-webkit-scrollbar { height: 6px; }
+        .filter-chips::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+        .chip:hover { border-color: #4ade80; color: #fff; }
+        .chip.active { color: #fff; border-color: transparent; box-shadow: 0 0 0 2px rgba(255,255,255,0.25); font-weight: 600; }
+        .chip svg { width: 13px; height: 13px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .chip .chip-count { background: rgba(0,0,0,0.35); padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: bold; min-width: 18px; text-align: center; }
+        .chip.active .chip-count { background: rgba(255,255,255,0.25); }
+
+        .status-pill-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .pill-btn {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 4px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+            cursor: pointer;
+            font-size: 11px;
+            line-height: 1.15;
+            transition: all 0.15s;
+            min-height: 60px;
+            font-family: inherit;
+        }
+        .pill-btn:hover { border-color: #4ade80; color: #fff; }
+        .pill-btn.active { color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.3); font-weight: 600; }
+        .pill-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .pill-btn-label { font-size: 11px; text-align: center; }
+
+        .btn-next-stage { background: #f59e0b; color: #000; font-weight: bold; }
+        .btn-next-stage:hover { background: #d97706; }
+        .btn-next-stage:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
+
         @media (max-width: 600px) {
             .contact.expanded .contact-fields {
                 grid-template-columns: 1fr;
@@ -667,8 +733,11 @@
                 margin-left: 0;
                 font-size: 14px;
             }
-            .card-actions { flex-direction: column; gap: 6px; }
-            .card-actions button { width: 100%; padding: 14px; font-size: 16px; }
+            .card-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px; }
+            .card-actions button { width: 100%; padding: 12px 6px; font-size: 13px; }
+            .status-pill-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+            .pill-btn { padding: 9px 3px; min-height: 56px; }
+            .pill-btn-label { font-size: 10px; }
             .stats-breakdown { font-size: 11px; gap: 10px; }
             .bulk-bar { gap: 6px; padding: 10px; }
             .bulk-bar .count { width: 100%; margin-bottom: 4px; }
@@ -714,28 +783,7 @@
             <input type="text" id="search-input" placeholder="Поиск по всем полям..." oninput="applyFilters()" style="flex-grow: 1; background: #1e293b; border: 1px solid #334155; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px;">
         </div>
         <div class="filters-row">
-            <label>Фильтр по статусу:</label>
-            <select id="filter-status" onchange="applyFilters()">
-                <option value="">Все</option>
-                <option value="no-status">Без статуса</option>
-                <option value="with-status">Только со статусами</option>
-                <option value="написать">📝 Надо написать</option>
-                <option value="написал">✉️ Написал</option>
-                <option value="ответили">💬 Ответили</option>
-                <option value="договорились">🤝 Договорились</option>
-                <option value="скинуть_пост">📤 Скинуть пост</option>
-                <option value="пост_скинул">📨 Пост скинул</option>
-                <option value="ждет_оплату">💳 Ждёт оплату</option>
-                <option value="ждем_публикацию">⏳ Ждём публикацию</option>
-                <option value="оплачено">💰 Оплачено</option>
-                <option value="опубликовано">✅ Опубликовано</option>
-                <option value="отказ">❌ Отказ</option>
-                <option value="мороз">🥶 Мороз</option>
-                <option value="не_рабочий">🚫 Контакт не рабочий</option>
-                <option value="отмена">⛔ Отмена</option>
-            </select>
-            
-            <label style="margin-left: 15px;">Сортировка:</label>
+            <label>Сортировка:</label>
             <select id="sort-by" onchange="applyFilters()">
                 <option value="id">По номеру</option>
                 <option value="status">По статусу</option>
@@ -743,6 +791,7 @@
                 <option value="checked-reverse">Сначала пройденные</option>
             </select>
         </div>
+        <div class="filter-chips" id="filter-chips"></div>
     </div>
     
     <div class="controls">
@@ -945,6 +994,26 @@
             "- подтверждение что запрошенная дата доступна для брони (!)\n\n" +
             "Тематика фейк гемблинг проект с возможностью ставить казино на свой домен и панелью с автоматическими выплатами.";
 
+        const PIPELINE = ['написать', 'написал', 'ответили', 'договорились', 'скинуть_пост', 'пост_скинул', 'ждет_оплату', 'ждем_публикацию', 'оплачено', 'опубликовано'];
+        const STATUS_SHORT = {
+            '': '—',
+            'написать': 'Надо написать',
+            'написал': 'Написал',
+            'ответили': 'Ответили',
+            'договорились': 'Договорились',
+            'скинуть_пост': 'Скинуть пост',
+            'пост_скинул': 'Пост скинул',
+            'ждет_оплату': 'Ждёт оплату',
+            'ждем_публикацию': 'Ждём публ.',
+            'оплачено': 'Оплачено',
+            'опубликовано': 'Опубликовано',
+            'отказ': 'Отказ',
+            'мороз': 'Мороз',
+            'не_рабочий': 'Не рабочий',
+            'отмена': 'Отмена'
+        };
+        const ALL_STATUSES = ['', 'написать', 'написал', 'ответили', 'договорились', 'скинуть_пост', 'пост_скинул', 'ждет_оплату', 'ждем_публикацию', 'оплачено', 'опубликовано', 'отказ', 'мороз', 'не_рабочий', 'отмена'];
+
         let progressData = {};
         let allExpanded = false;
         let syncTimeout = null;
@@ -952,6 +1021,7 @@
         let selectMode = false;
         let selectedIds = new Set();
         let sortableInstance = null;
+        let currentFilter = 'all';
 
         // ========== СИНХРОНИЗАЦИЯ ==========
         
@@ -1055,6 +1125,133 @@
             return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
 
+        function renderStatusPillGrid(id, currentStatus) {
+            return ALL_STATUSES.map(s => {
+                const isActive = (currentStatus || '') === s;
+                const color = statusColors[s] || '#334155';
+                const activeStyle = isActive ? 'background:' + color + ';border-color:' + color + ';' : '';
+                return '<button type="button" class="pill-btn' + (isActive ? ' active' : '') + '" data-status="' + s + '" ' +
+                    (activeStyle ? 'style="' + activeStyle + '" ' : '') +
+                    'onclick="event.stopPropagation(); setCardStatus(\'' + id + '\', \'' + s + '\')">' +
+                    (statusIcons[s] || statusIcons['']) +
+                    '<span class="pill-btn-label">' + STATUS_SHORT[s] + '</span>' +
+                    '</button>';
+            }).join('');
+        }
+
+        function nextStageBtnHtml(id, currentStatus) {
+            const idx = PIPELINE.indexOf(currentStatus || '');
+            let label, disabled = false;
+            if (idx === -1) {
+                label = '→ Старт: ' + STATUS_SHORT[PIPELINE[0]];
+            } else if (idx >= PIPELINE.length - 1) {
+                label = '✓ Конец';
+                disabled = true;
+            } else {
+                label = '→ ' + STATUS_SHORT[PIPELINE[idx + 1]];
+            }
+            return '<button type="button" class="btn-next-stage" ' + (disabled ? 'disabled' : '') +
+                ' onclick="event.stopPropagation(); nextStage(\'' + id + '\')">' + label + '</button>';
+        }
+
+        function setCardStatus(id, status) {
+            if (!progressData[id]) progressData[id] = {};
+            progressData[id].status = status;
+            scheduleSaveToCloud();
+            updateStats();
+            renderFilterChips();
+
+            const contact = document.querySelector('.contact[data-id="' + id + '"]');
+            if (!contact) return;
+
+            // status badge
+            const badge = contact.querySelector('.contact-status');
+            if (badge) {
+                badge.style.background = statusColors[status] || '#334155';
+                badge.innerHTML = (statusIcons[status] || statusIcons['']) + statusLabelClean(status);
+            }
+            // pill grid active state
+            contact.querySelectorAll('.pill-btn').forEach(btn => {
+                const isActive = btn.dataset.status === status;
+                btn.classList.toggle('active', isActive);
+                if (isActive) {
+                    const color = statusColors[btn.dataset.status] || '#334155';
+                    btn.style.background = color;
+                    btn.style.borderColor = color;
+                } else {
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                }
+            });
+            // next-stage button
+            const actions = contact.querySelector('.card-actions');
+            if (actions) {
+                const oldBtn = actions.querySelector('.btn-next-stage');
+                if (oldBtn) {
+                    const wrap = document.createElement('div');
+                    wrap.innerHTML = nextStageBtnHtml(id, status);
+                    actions.replaceChild(wrap.firstChild, oldBtn);
+                }
+            }
+        }
+
+        function nextStage(id) {
+            const cur = (progressData[id] || {}).status || '';
+            const idx = PIPELINE.indexOf(cur);
+            let next;
+            if (idx === -1) next = PIPELINE[0];
+            else if (idx >= PIPELINE.length - 1) return;
+            else next = PIPELINE[idx + 1];
+            setCardStatus(id, next);
+            showToast('→ ' + STATUS_SHORT[next]);
+        }
+
+        function renderFilterChips() {
+            const container = document.getElementById('filter-chips');
+            if (!container) return;
+
+            const counts = {};
+            let noStatus = 0;
+            contactsData.forEach(c => {
+                const s = (progressData[c.id] || {}).status || '';
+                if (!s) noStatus++;
+                else counts[s] = (counts[s] || 0) + 1;
+            });
+            const total = contactsData.length;
+            const withStatus = total - noStatus;
+
+            const chipDefs = [
+                { value: 'all', label: 'Все', count: total, color: '#475569', icon: '' },
+                { value: 'no-status', label: 'Без статуса', count: noStatus, color: '#64748b', icon: statusIcons[''] },
+                { value: 'with-status', label: 'Со статусами', count: withStatus, color: '#3b82f6', icon: statusIcons['написал'] }
+            ];
+            ALL_STATUSES.filter(s => s).forEach(s => {
+                chipDefs.push({
+                    value: s,
+                    label: STATUS_SHORT[s],
+                    count: counts[s] || 0,
+                    color: statusColors[s],
+                    icon: statusIcons[s]
+                });
+            });
+
+            container.innerHTML = chipDefs.map(chip => {
+                const isActive = currentFilter === chip.value;
+                const style = isActive ? 'style="background:' + chip.color + ';"' : '';
+                return '<button type="button" class="chip' + (isActive ? ' active' : '') + '" ' + style +
+                    ' onclick="setFilter(\'' + chip.value + '\')">' +
+                    (chip.icon || '') +
+                    '<span>' + chip.label + '</span>' +
+                    '<span class="chip-count">' + chip.count + '</span>' +
+                    '</button>';
+            }).join('');
+        }
+
+        function setFilter(value) {
+            currentFilter = value;
+            applyFilters();
+        }
+
         function renderContacts(filteredData = null) {
             const container = document.getElementById('contacts-list');
             container.innerHTML = '';
@@ -1096,25 +1293,9 @@
                             '<span class="expand-icon">▼</span>' +
                         '</div>' +
                         '<div class="contact-fields">' +
-                            '<div class="field">' +
+                            '<div class="field full-width">' +
                                 '<label>Статус</label>' +
-                                '<select onchange="updateField(\'' + c.id + '\', \'status\', this.value)">' +
-                                    '<option value=""' + (!data.status ? ' selected' : '') + '>—</option>' +
-                                    '<option value="написать"' + (data.status === 'написать' ? ' selected' : '') + '>📝 Надо написать</option>' +
-                                    '<option value="написал"' + (data.status === 'написал' ? ' selected' : '') + '>✉️ Написал</option>' +
-                                    '<option value="ответили"' + (data.status === 'ответили' ? ' selected' : '') + '>💬 Ответили</option>' +
-                                    '<option value="договорились"' + (data.status === 'договорились' ? ' selected' : '') + '>🤝 Договорились</option>' +
-                                    '<option value="скинуть_пост"' + (data.status === 'скинуть_пост' ? ' selected' : '') + '>📤 Скинуть пост</option>' +
-                                    '<option value="пост_скинул"' + (data.status === 'пост_скинул' ? ' selected' : '') + '>📨 Пост скинул</option>' +
-                                    '<option value="ждет_оплату"' + (data.status === 'ждет_оплату' ? ' selected' : '') + '>💳 Ждёт оплату</option>' +
-                                    '<option value="ждем_публикацию"' + (data.status === 'ждем_публикацию' ? ' selected' : '') + '>⏳ Ждём публикацию</option>' +
-                                    '<option value="оплачено"' + (data.status === 'оплачено' ? ' selected' : '') + '>💰 Оплачено</option>' +
-                                    '<option value="опубликовано"' + (data.status === 'опубликовано' ? ' selected' : '') + '>✅ Опубликовано</option>' +
-                                    '<option value="отказ"' + (data.status === 'отказ' ? ' selected' : '') + '>❌ Отказ</option>' +
-                                    '<option value="мороз"' + (data.status === 'мороз' ? ' selected' : '') + '>🥶 Мороз</option>' +
-                                    '<option value="не_рабочий"' + (data.status === 'не_рабочий' ? ' selected' : '') + '>🚫 Контакт не рабочий</option>' +
-                                    '<option value="отмена"' + (data.status === 'отмена' ? ' selected' : '') + '>⛔ Отмена</option>' +
-                                '</select>' +
+                                '<div class="status-pill-grid">' + renderStatusPillGrid(c.id, curStatus) + '</div>' +
                             '</div>' +
                             '<div class="field">' +
                                 '<label>Цена</label>' +
@@ -1141,6 +1322,7 @@
                                 '<textarea placeholder="каналы, боты, чаты..." onchange="updateField(\'' + c.id + '\', \'platforms\', this.value)">' + escapeHtml(data.platforms || '') + '</textarea>' +
                             '</div>' +
                             '<div class="card-actions">' +
+                                nextStageBtnHtml(c.id, curStatus) +
                                 '<button class="btn-copy-offer" onclick="event.stopPropagation(); copyOffer(\'' + c.id + '\')">📋 Копировать оффер</button>' +
                                 '<button class="btn-open-tg" onclick="event.stopPropagation(); openContact(\'' + c.id + '\')">📞 Открыть в TG</button>' +
                                 '<button class="btn-done" onclick="event.stopPropagation(); markDone(\'' + c.id + '\')">' + (isChecked ? '↩️ Не готово' : '✓ Готово') + '</button>' +
@@ -1155,13 +1337,14 @@
         }
 
         function applyFilters() {
-            const filterStatus = document.getElementById('filter-status').value;
+            renderFilterChips();
+            const filterStatus = currentFilter;
             const sortBy = document.getElementById('sort-by').value;
             const searchInput = document.getElementById('search-input');
             const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            
+
             let filtered = [...contactsData];
-            
+
             if (searchQuery) {
                 filtered = filtered.filter(c => {
                     const data = progressData[c.id] || {};
@@ -1178,16 +1361,16 @@
                         data.notes || '',
                         data.platforms || ''
                     ].join(' ').toLowerCase();
-                    
+
                     return searchFields.includes(searchQuery);
                 });
             }
-            
+
             if (filterStatus === 'no-status') {
                 filtered = filtered.filter(c => !progressData[c.id]?.status);
             } else if (filterStatus === 'with-status') {
                 filtered = filtered.filter(c => progressData[c.id]?.status);
-            } else if (filterStatus) {
+            } else if (filterStatus && filterStatus !== 'all') {
                 filtered = filtered.filter(c => progressData[c.id]?.status === filterStatus);
             }
             
@@ -1262,13 +1445,6 @@
         function updateField(id, field, value) {
             if (!progressData[id]) progressData[id] = {};
             progressData[id][field] = value;
-            
-            if (field === 'status') {
-                const contact = document.querySelector('.contact[data-id="' + id + '"]');
-                const statusSpan = contact.querySelector('.contact-status');
-                statusSpan.textContent = statusLabels[value] || '—';
-            }
-            
             scheduleSaveToCloud();
         }
 
